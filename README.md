@@ -1,2 +1,2 @@
 # Cheques
- Proyecto de Opecn Source
+ Proyecto de Open Source
