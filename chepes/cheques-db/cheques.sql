@@ -1,0 +1,40 @@
+--CREATE DATABASE cheques
+USE cheques
+
+CREATE TABLE Conceptos(
+Id INT IDENTITY (1,1) NOT NULL,
+Descripcion VARCHAR(250),
+Estado varchar(20) CHECK (Estado IN ('Activo','Inactivo')) NOT NULL,
+CONSTRAINT PK_IDC PRIMARY KEY(Id)
+)
+
+CREATE TABLE Proveedores (
+Id INT IDENTITY (1,1) NOT NULL,
+Nombre VARCHAR(250) NOT NULL,
+Tipo_Persona VARCHAR(10) CHECK (Tipo_Persona IN ('Fisica','Juridica')) NOT NULL,
+Cedula VARCHAR(11) NOT NULL,
+Balance NUMERIC(15,2) NOT NULL,
+Cuenta_Contable VARCHAR(50) NOT NULL,
+Estado VARCHAR(20) CHECK (Estado IN ('Activo','Inactivo')) NOT NULL,
+CONSTRAINT PK_IDP PRIMARY KEY(Id)
+)
+
+CREATE TABLE Solicitudes_Cheques (
+Id INT IDENTITY (1,1) NOT NULL,
+Proveedor INT NOT NULL,
+Monto NUMERIC(15,2) NOT NULL,
+Fecha_Registo DATE NOT NULL,
+Estado varchar(20) CHECK (Estado IN ('Pendiente','Anulada','Cheque Generado')) NOT NULL,
+Cuenta_Proveedor VARCHAR(50) NOT NULL,
+Cuenta_Banco VARCHAR(50) NOT NULL,
+CONSTRAINT PK_IDSC PRIMARY KEY(Id),
+CONSTRAINT FK_IDP FOREIGN KEY(Proveedor) REFERENCES Proveedores(Id),
+)
+
+CREATE TABLE Usuarios (
+Id INT IDENTITY (1,1) NOT NULL,
+Usuario VARCHAR(50) NOT NULL,
+Pass VARCHAR(50) NOT NULL,
+Tipo INT NOT NULL,
+CONSTRAINT PK_IDU PRIMARY KEY(Id),
+)
