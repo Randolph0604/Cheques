@@ -1,0 +1,36 @@
+.paper {
+    padding: 0px;
+    width: 50%;
+    height: 50%;
+    min-width: fit-content;
+    display: flex;
+    align-items: center;
+    flex-flow: wrap column;
+  }
+  
+  .grid {
+    padding: 20px;
+  }
+  
+  .form {
+    min-width: 700px;
+    min-height: 150px;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    flex-flow: column wrap;
+  }
+  
+  .table {
+    margin: 30px 0;
+    /* width: 100%; */
+  }
+  
+  .img {
+    width: 200px;
+  }
+  

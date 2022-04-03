@@ -17,8 +17,7 @@ import {
 } from "@mui/material";
 // import SaveIcon from "@mui/icons-material/Save";
 // import ClearAllIcon from "@mui/icons-material/ClearAll";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import EditIcon from "@mui/icons-material/Edit";
+import { BookmarkAdd, EditIcon, DeleteForeverIcon } from "@mui/icons-material";
 import "./Documents.css";
 // import logo from "../../logo.svg";
 import { Consultar } from "../../common/server/funcionesServidor";
@@ -27,8 +26,10 @@ import {
   FormatearFecha,
   convertirTextoAFecha,
 } from "../../common/funciones/funciones";
+import Busqueda from "../../common/busqueda/busqueda";
 
-const Solicitud = () => {
+const Cheques = () => {
+  const [busqueda, setBusqueda] = useState(false);
   const [modificando, setModificando] = useState({
     Id: undefined,
     Proveedor: undefined,
@@ -56,8 +57,8 @@ const Solicitud = () => {
   const consultar = async () => {
     setData(
       await Consultar(`api/solicituds/consultar`, null, null, {
-        where: `s.estado in ('Pendiente','Anulada')`,
-        order: `Id ASC`,
+        where: `s.estado = 'Cheque Generado'`,
+        order: `ID ASC`,
       })
     );
   };
@@ -127,6 +128,7 @@ const Solicitud = () => {
     Estado,
     Cuenta_Proveedor,
     Cuenta_Banco,
+    proveedorNombre,
   }) => {
     setModificando({
       Id: Id,
@@ -139,6 +141,7 @@ const Solicitud = () => {
       Estado: Estado,
       Cuenta_Proveedor: Cuenta_Proveedor,
       Cuenta_Banco: Cuenta_Banco,
+      proveedorNombre: proveedorNombre ? proveedorNombre : null,
     });
   };
 
@@ -163,8 +166,22 @@ const Solicitud = () => {
     });
   };
 
+  const funcionCerrar = (registro) => {
+    if (registro) {
+      onModificar(registro);
+    }
+    setBusqueda(false);
+  };
   return (
     <div className="container">
+      {busqueda ? (
+        <Busqueda
+          collection="solicituds"
+          funcionCerrar={funcionCerrar}
+          where={`s.estado = 'Pendiente'`}
+          order={`Id ASC`}
+        />
+      ) : null}
       <Paper variant="outlined" className="paper">
         {/* <img src={logo} className="img App-logo" alt="img" /> */}
         <Grid container spacing={2} className="grid">
@@ -172,7 +189,7 @@ const Solicitud = () => {
             <TextField
               fullWidth
               id="outlined-password-input"
-              label="Código Solicitud"
+              label="Codigo Cheque"
               type="text"
               name="Id"
               value={modificando.Id}
@@ -184,25 +201,21 @@ const Solicitud = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            {/* <InputLabel id="demo-simple-select-label">Status</InputLabel> */}
-            <Select
+            <TextField
               fullWidth
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              id="outlined-password-input"
               label="Proveedor"
-              name="Proveedor"
-              value={modificando.Proveedor}
+              type="text"
+              name="proveedorNombre"
+              value={modificando.proveedorNombre}
+              disabled
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={(e) => handleInputs(e.target.value, "Proveedor")}
-            >
-              {suppliers
-                ? suppliers.map((e) => {
-                    return <MenuItem value={e.Id}>{e.Nombre}</MenuItem>;
-                  })
-                : null}
-            </Select>
+              onChange={(e) =>
+                handleInputs(e.currentTarget.value, "proveedorNombre")
+              }
+            />
           </Grid>
           <Grid item xs={6}>
             <TextField
@@ -228,6 +241,7 @@ const Solicitud = () => {
               label="Monto Cheque*"
               type="number"
               name="Monto"
+              disabled
               value={modificando.Monto}
               onChange={(e) => handleInputs(e.currentTarget.value, "Monto")}
             />
@@ -238,6 +252,7 @@ const Solicitud = () => {
               id="outlined-password-input"
               label="Cuenta Banco*"
               type="text"
+              disabled
               name="Cuenta_Banco"
               value={modificando.Cuenta_Banco}
               onChange={(e) =>
@@ -252,6 +267,7 @@ const Solicitud = () => {
               label="Fecha de Registro*"
               type="Date"
               name="Fecha_Registo"
+              disabled
               value={modificando.Fecha_Registo}
               InputLabelProps={{
                 shrink: true,
@@ -268,7 +284,6 @@ const Solicitud = () => {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Estado"
-              disabled
               name="Estado"
               value={modificando.Estado}
               onChange={(e) => handleInputs(e.target.value, "Estado")}
@@ -306,6 +321,21 @@ const Solicitud = () => {
                 // endIcon={<ClearAllIcon />}
               >
                 Limpiar
+              </Button>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <Button
+                className="btnSolicitud"
+                onClick={() => setBusqueda(true)}
+                type="button"
+                color="inherit"
+                variant="contained"
+                size="large"
+                // endIcon={<ClearAllIcon />}
+              >
+                Buscar Solicitud
               </Button>
             </FormControl>
           </Grid>
@@ -363,6 +393,14 @@ const Solicitud = () => {
                         <EditIcon />
                       </IconButton>
                       <IconButton
+                        onClick={() => onModificar(data)}
+                        style={{ color: "#ff9100" }}
+                        aria-label="BookmarkAdd"
+                        component="span"
+                      >
+                        <BookmarkAdd />
+                      </IconButton>
+                      <IconButton
                         onClick={() => onDelete(data.Id)}
                         color="error"
                         aria-label="upload picture"
@@ -382,4 +420,4 @@ const Solicitud = () => {
   );
 };
 
-export default Solicitud;
+export default Cheques;

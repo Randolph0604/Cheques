@@ -1,15 +1,13 @@
 import "./App.css";
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/home/Home";
 import Nav from "./components/nav/Nav";
 import Suppliers from "./components/suppliers/Suppliers";
-import Documents from "./components/documents/Documents";
 import PaymentConcept from "./components/paymentConcepts/PaymentConcepts";
-import AccountingEntries from "./components/accountingEntries/accountingEntries";
 import Solicitud from "./components/solicitud/Solicitud";
 import Login from "./components/login/login";
 import Usuarios from "./components/usuarios/Usuarios";
+import Cheques from "./components/cheques/Cheques";
 import { CssBaseline } from "@material-ui/core";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -61,7 +59,10 @@ function App() {
           <Nav logout={logout} user={user} />
           <Routes>
             {user.Tipo === 2 ? (
-              <Route exact path="/Usuarios" element={<Usuarios />} />
+              <>
+                <Route exact path="/Usuarios" element={<Usuarios />} />
+                <Route exact path="/cheques" element={<Cheques />} />
+              </>
             ) : null}
             <Route exact path="/paymentConcepts" element={<PaymentConcept />} />
             <Route exact path="/Suppliers" element={<Suppliers />} />
@@ -70,7 +71,7 @@ function App() {
             {/* <Route
               exact
               path="/accountingEntries"
-              element={<AccountingEntries />}
+              elem  ent={<AccountingEntries />}
             /> */}
             <Route exact path="/" element={<Suppliers />} />
           </Routes>

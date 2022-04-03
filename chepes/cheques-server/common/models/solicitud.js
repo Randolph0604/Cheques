@@ -3,8 +3,11 @@
 module.exports = function (Solicitud) {
   Solicitud.consultar = (where, order, cb) => {
     const ds = Solicitud.app.dataSources.SQLServerContinuo.connector;
-    let query = `select S.*, P.Nombre as proveedorNombre from Solicitudes_Cheques S\
-    inner join Proveedores P on (P.Id = S.Proveedor)`;
+    let query =
+      `select S.*, P.Nombre as proveedorNombre from Solicitudes_Cheques S\
+    inner join Proveedores P on (P.Id = S.Proveedor)` +
+      (where !== undefined ? ` where ${where}` : ``) +
+      (order !== undefined ? ` order by ${order}` : ``);
 
     ds.query(query, [], async (error, data) => {
       if (error) cb(error);
