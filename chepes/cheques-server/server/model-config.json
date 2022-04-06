@@ -28,5 +28,9 @@
   "usuario": {
     "dataSource": "SQLServerContinuo",
     "public": true
+  },
+  "asiento": {
+    "dataSource": "SQLServerContinuo",
+    "public": true
   }
 }

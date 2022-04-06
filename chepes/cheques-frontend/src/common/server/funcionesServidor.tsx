@@ -29,7 +29,7 @@ const serverCall = async <T extends any>(
 
     try {
       documento = await response.json();
-    } catch (error) {}
+    } catch (error) { }
 
     //Se convierte de object a array para tener respuestas estandarizadas
     if (documento.length === undefined) documento = [documento];
@@ -60,9 +60,9 @@ const serverCall = async <T extends any>(
       // @ts-ignore
       const error: any = MensajesError(mensajeError.message)
         ? // @ts-ignore
-          MensajesError(mensajeError.message)
+        MensajesError(mensajeError.message)
         : // @ts-ignore
-          mensajeError.message;
+        mensajeError.message;
 
       MensajeAlerta("error", error, false);
     }
@@ -106,15 +106,16 @@ export const Consultar = <T extends any>(
   filtro?: string,
   tokenAUtilizar?: string,
   arregloHeaders?: any,
-  validator?: any
+  validator?: any,
+  messageOnSuccess?: string,
 ): Promise<T[]> =>
   serverCall<T>(
     baseUrl + rutaAPI + (filtro ? `?filter=${JSON.stringify(filtro)}` : ``),
     "GET",
     arregloHeaders,
     undefined,
-    undefined,
-    validator
+    messageOnSuccess,
+    validator,
   );
 
 export const Ejecutar = <T extends any>(

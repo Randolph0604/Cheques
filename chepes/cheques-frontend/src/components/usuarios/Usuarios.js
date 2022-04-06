@@ -208,6 +208,7 @@ const Usuarios = () => {
                   <TableCell className="title">Usuario</TableCell>
                   <TableCell className="title">Contraseña</TableCell>
                   <TableCell className="title">Tipo</TableCell>
+                  <TableCell className="title">Acciones</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

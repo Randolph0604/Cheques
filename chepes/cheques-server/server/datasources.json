@@ -2,8 +2,8 @@
   "SQLServerContinuo": {
     "host": "127.0.0.1",
     "port": 1433,
-    "database": "cheques",
-    "password": "Enderman4link4",
+    "database": "CHEQUES",
+    "password": "1234",
     "name": "SQLServerContinuo",
     "user": "sa",
     "connector": "mssql"

@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 // import SaveIcon from "@mui/icons-material/Save";
 // import ClearAllIcon from "@mui/icons-material/ClearAll";
-import { BookmarkAdd, EditIcon, DeleteForeverIcon } from "@mui/icons-material";
+import { BookmarkAdd, Edit, DeleteForever } from "@mui/icons-material";
 import "./Documents.css";
 // import logo from "../../logo.svg";
 import { Consultar } from "../../common/server/funcionesServidor";
@@ -27,8 +27,15 @@ import {
   convertirTextoAFecha,
 } from "../../common/funciones/funciones";
 import Busqueda from "../../common/busqueda/busqueda";
+import FiltrosFecha from "../../common/FiltrosFecha/FiltrosFecha";
+import { useQuery } from "react-query";
+import { queryClient } from "../../../src/index";
 
 const Cheques = () => {
+  const [filtros, setFiltros] = useState({
+    fechaDesde: FormatearFecha(new Date(), "YYYY-MM-DD"),
+    fechaHasta: FormatearFecha(new Date(), "YYYY-MM-DD"),
+  });
   const [busqueda, setBusqueda] = useState(false);
   const [modificando, setModificando] = useState({
     Id: undefined,
@@ -52,16 +59,13 @@ const Cheques = () => {
     },
   ]);
 
-  const [data, setData] = useState(undefined);
-
-  const consultar = async () => {
-    setData(
-      await Consultar(`api/solicituds/consultar`, null, null, {
-        where: `s.estado = 'Cheque Generado'`,
-        order: `ID ASC`,
+  const { data } = useQuery(
+    ["data", filtros],
+    async () =>
+      await Consultar(`api/solicituds/consultar`, undefined, undefined, {
+        where: `s.estado = 'Cheque Generado' and s.Fecha_Registo between '${filtros.fechaDesde}' and '${filtros.fechaHasta}'`,
       })
-    );
-  };
+  );
 
   const consultarSuppliers = async () => {
     setSuppliers(
@@ -70,7 +74,6 @@ const Cheques = () => {
   };
 
   useEffect(() => {
-    consultar();
     consultarSuppliers();
   }, []);
 
@@ -115,9 +118,8 @@ const Cheques = () => {
     await Consultar(`api/solicituds/crear`, null, null, {
       object: JSON.stringify(modificando),
     });
-
-    consultar();
     onClear();
+    queryClient.invalidateQueries("data");
   };
 
   const onModificar = ({
@@ -125,7 +127,6 @@ const Cheques = () => {
     Proveedor,
     Monto,
     Fecha_Registo,
-    Estado,
     Cuenta_Proveedor,
     Cuenta_Banco,
     proveedorNombre,
@@ -138,7 +139,7 @@ const Cheques = () => {
         "YYYY-MM-DD"
       ),
       Monto: Monto,
-      Estado: Estado,
+      Estado: "Cheque Generado",
       Cuenta_Proveedor: Cuenta_Proveedor,
       Cuenta_Banco: Cuenta_Banco,
       proveedorNombre: proveedorNombre ? proveedorNombre : null,
@@ -150,8 +151,9 @@ const Cheques = () => {
       await Consultar(`api/solicituds/eliminar`, null, null, {
         Id: id,
       });
-      consultar();
     }
+
+    queryClient.invalidateQueries("data");
   };
 
   const onClear = () => {
@@ -171,6 +173,26 @@ const Cheques = () => {
       onModificar(registro);
     }
     setBusqueda(false);
+  };
+
+  const crearAsiento = async (registro) => {
+    let documento = JSON.parse(JSON.stringify(registro));
+
+    documento.Fecha_Registo = FormatearFecha(
+      convertirTextoAFecha(documento.Fecha_Registo),
+      "YYYY-MM-DD"
+    );
+
+    await Consultar(
+      `api/asientos/crear`,
+      null,
+      null,
+      {
+        object: JSON.stringify(documento),
+      },
+      undefined,
+      "Asientos contables creados"
+    );
   };
   return (
     <div className="container">
@@ -349,6 +371,7 @@ const Cheques = () => {
             component={Paper}
             sx={{ maxWidth: "auto" }}
           >
+            <FiltrosFecha filtros={filtros} setFiltros={setFiltros} />
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -390,10 +413,10 @@ const Cheques = () => {
                         aria-label="upload picture"
                         component="span"
                       >
-                        <EditIcon />
+                        <Edit />
                       </IconButton>
                       <IconButton
-                        onClick={() => onModificar(data)}
+                        onClick={() => crearAsiento(data)}
                         style={{ color: "#ff9100" }}
                         aria-label="BookmarkAdd"
                         component="span"
@@ -406,7 +429,7 @@ const Cheques = () => {
                         aria-label="upload picture"
                         component="span"
                       >
-                        <DeleteForeverIcon />
+                        <DeleteForever />
                       </IconButton>
                     </TableCell>
                   </TableRow>

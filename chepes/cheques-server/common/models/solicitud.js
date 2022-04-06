@@ -34,6 +34,14 @@ module.exports = function (Solicitud) {
     const ds = Solicitud.app.dataSources.SQLServerContinuo.connector;
 
     if (object.Id) {
+      if (object.Estado === "Anulada") {
+        let query2 = `UPDATE ASIENTO SET DEBITO = 0, CREDITO = 0 WHERE ID_CHEQUE = ${object.Id}`;
+
+        ds.query(query2, [], async (error) => {
+          if (error) cb(error);
+        });
+      }
+
       let query = `update Solicitudes_Cheques set \
       Proveedor = ${object.Proveedor},\
       Monto = ${object.Monto},\
@@ -83,6 +91,12 @@ module.exports = function (Solicitud) {
     const ds = Solicitud.app.dataSources.SQLServerContinuo.connector;
 
     if (Id) {
+      let query2 = `delete from asiento where id_cheque = ${Id}`;
+
+      ds.query(query2, [], async (error) => {
+        if (error) cb(error);
+      });
+
       let query = `delete from Solicitudes_Cheques where id = ${Id}`;
 
       ds.query(query, [], async (error, data) => {

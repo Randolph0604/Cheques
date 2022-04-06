@@ -2,10 +2,7 @@ import { Column, Options, Localization } from "@material-table/core";
 import { ExportCsv } from "@material-table/exporters";
 import {
   FormatearNumeroCurrency,
-  FormatearFecha,
-  convertirTextoAFecha,
   ExportarPDF,
-  NombreMes,
 } from "../funciones/funciones";
 
 export const options = (
@@ -96,6 +93,78 @@ export const cabezeras = (
           type: "numeric",
           title: "Monto",
           field: "Monto",
+          render: (rowData) => (
+            <span>
+              {rowData.Monto === null
+                ? null
+                : FormatearNumeroCurrency.format(rowData.Monto)}
+            </span>
+          ),
+        },
+        {
+          type: "string",
+          title: "Estado",
+          field: "Estado",
+        },
+      ];
+    case "asiento":
+      return [
+        {
+          type: "string",
+          title: "Cuenta",
+          field: "Cuenta",
+        },
+        {
+          type: "numeric",
+          title: "Debito",
+          field: "Debito",
+          render: (rowData) => (
+            <span>
+              {rowData.Debito === null
+                ? null
+                : FormatearNumeroCurrency.format(rowData.Debito)}
+            </span>
+          ),
+        },
+        {
+          type: "numeric",
+          title: "Crédito",
+          field: "Credito",
+          render: (rowData) => (
+            <span>
+              {rowData.Credito === null
+                ? null
+                : FormatearNumeroCurrency.format(rowData.Credito)}
+            </span>
+          ),
+        },
+      ];
+    case "suppliers":
+      return [
+        {
+          type: "string",
+          title: "Nombre",
+          field: "Nombre",
+        },
+        {
+          type: "string",
+          title: "Tipo de Persona",
+          field: "Tipo_Persona",
+        },
+        {
+          type: "string",
+          title: "Cédula",
+          field: "Cedula",
+        },
+        {
+          type: "numeric",
+          title: "Balance",
+          field: "Balance",
+        },
+        {
+          type: "string",
+          title: "Cuenta Contable",
+          field: "Cuenta_Contable",
         },
         {
           type: "string",

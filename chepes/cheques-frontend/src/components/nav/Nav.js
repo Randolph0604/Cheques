@@ -71,6 +71,36 @@ const Nav = ({ logout, user }) => {
               </IconButton>
             </Link>
           ) : null}
+          <Link
+            to="/Asientos"
+            style={{ textDecoration: "none", color: "#fff" }}
+          >
+            <IconButton color="inherit">
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Asientos
+              </Typography>
+            </IconButton>
+          </Link>
+          <Link
+            to="/SuppliersR"
+            style={{ textDecoration: "none", color: "#fff" }}
+          >
+            <IconButton color="inherit">
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Reporte Suplidores
+              </Typography>
+            </IconButton>
+          </Link>
+          <Link
+            to="/ChequesR"
+            style={{ textDecoration: "none", color: "#fff" }}
+          >
+            <IconButton color="inherit">
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Reporte Cheques
+              </Typography>
+            </IconButton>
+          </Link>
           <IconButton
             color="inherit"
             style={{ margin: 0, right: 0, position: "absolute" }}

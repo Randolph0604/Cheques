@@ -14,10 +14,12 @@ import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Consultar } from "./common/server/funcionesServidor";
 import MensajeAlerta from "./common/mensajeAlerta/mensajeAlerta";
+import Asientos from "./components/accountingEntries/Asiento";
+import ChequesR from "./components/reports/cheques/ChequesR";
+import SuplidoresR from "./components/reports/suplidores/Suplidores";
 
 function App() {
   const [user, setUser] = useState(undefined);
-
   const onLogin = async ({ user, pass }) => {
     if (user === "admin" && pass === "1234") {
       setUser({
@@ -67,12 +69,9 @@ function App() {
             <Route exact path="/paymentConcepts" element={<PaymentConcept />} />
             <Route exact path="/Suppliers" element={<Suppliers />} />
             <Route exact path="/Solicitud" element={<Solicitud />} />
-            {/* <Route exact path="/Documents" element={<Documents />} /> */}
-            {/* <Route
-              exact
-              path="/accountingEntries"
-              elem  ent={<AccountingEntries />}
-            /> */}
+            <Route exact path="/Asientos" element={<Asientos />} />
+            <Route exact path="/ChequesR" element={<ChequesR />} />
+            <Route exact path="/SuppliersR" element={<SuplidoresR />} />
             <Route exact path="/" element={<Suppliers />} />
           </Routes>
         </>
