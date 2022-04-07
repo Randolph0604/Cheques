@@ -2,13 +2,8 @@
   "SQLServerContinuo": {
     "host": "chequesdb.database.windows.net",
     "port": 1433,
-<<<<<<< HEAD:cheques/cheques-server/server/datasources.json
     "database": "cheques",
     "password": "@OpenSource",
-=======
-    "database": "CHEQUES",
-    "password": "1234",
->>>>>>> 8b6024f316d341c3a595bff54d4d38d53f3a6754:chepes/cheques-server/server/datasources.json
     "name": "SQLServerContinuo",
     "user": "chequessa",
     "connector": "mssql"
